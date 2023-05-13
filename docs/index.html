@@ -1,0 +1,58 @@
+<html>
+
+<head>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./main.js"></script>
+  <script src="./wand.js"></script>
+  <script>
+    function toggleFlames() {
+      var element = document.getElementById("out-container");
+      element.classList.toggle("use-flames");
+    }
+  </script>
+</head>
+
+<body>
+  <section id="in-container">
+    <input type="text" id="from-text" onkeyup="fromTextChanged()" value="Tom Marvolo Riddle">
+    <input type="text" id="to-text" onkeyup="toTextChanged()" value="I am Lord Voldemort">
+    <button onclick="toggleFlames()">Toggle Flames (disable if poor performance)</button>
+  </section>
+  <section id="out-container" class="use-flames" onclick="animateText()">
+    <div class="fire" id="display-text"></div>
+    <svg class="mouse-container">
+      <g filter="url(#flames)">
+        <path id="glow-path" filter="url(#glow)" fill="none" opacity="1" stroke="url(#fire-gradient)" stroke-width="5">
+        </path>
+        <path id="goo-path" filter="url(#goo)" fill="none" opacity="0.85" stroke="url(#fire-gradient)"
+          stroke-linejoin="round" stroke-linecap="round">
+        </path>
+      </g>
+    </svg>
+  </section>
+  <svg>
+    <defs>
+      <linearGradient id="fire-gradient" gradientTransform="rotate(0 0.5 0.5)" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="none" />
+        <stop offset="100%" stop-color="#fa621b" />
+      </linearGradient>
+      <filter id="glow" x="-50%" y="-50%" height="500%" width="500%">
+        <feGaussianBlur stdDeviation="12" result="coloredBlur" />
+      </filter>
+      <filter id="goo">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -8" result="goo" />
+        <feBlend in="SourceGraphic" in2="goo" />
+      </filter>
+      <filter id="flames">
+        <feTurbulence id="turbulence" baseFrequency="0.05 0.05" offset="20" numOctaves="2">
+          <animate attributeName="baseFrequency" dur="5s" values="0.1 0.1; 0.09 0.14" repeatCount="indefinite">
+          </animate>
+        </feTurbulence>
+        <feDisplacementMap in="SourceGraphic" scale="4"></feDisplacementMap>
+      </filter>
+    </defs>
+  </svg>
+</body>
+
+</html>
