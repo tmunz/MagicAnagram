@@ -1,12 +1,16 @@
 const CURSOR_TAIL_MAX = 50;
-const CURSOR_TAIL_TIME = 1000;
+const CURSOR_TAIL_TIME = 600;
 let cursorPoints = [];
+let lastUpdateTime = new Date();
 
 function addPoint(e) {
-  cursorPoints.push([e.pageX, e.pageY]);
-  CURSOR_TAIL_MAX < cursorPoints.length && cursorPoints.shift();
-  update();
-  setTimeout(() => (0 < cursorPoints.length && (cursorPoints.shift() | update())), CURSOR_TAIL_TIME);
+  if (40 <= new Date() - lastUpdateTime) {
+    cursorPoints.push([e.pageX, e.pageY]);
+    CURSOR_TAIL_MAX < cursorPoints.length && cursorPoints.shift();
+    update();
+    lastUpdateTime = new Date();
+    setTimeout(() => (0 < cursorPoints.length && (cursorPoints.shift() | update())), CURSOR_TAIL_TIME);
+  }
 };
 
 function update() {
@@ -32,7 +36,7 @@ function update() {
   }
   glow.setAttribute("d", path);
   goo.setAttribute("d", path);
-  goo.setAttribute("stroke-width", cursorPoints.length / CURSOR_TAIL_MAX * 10);
+  goo.setAttribute("stroke-width", Math.min(cursorPoints.length / CURSOR_TAIL_MAX * 5));
 
   const tailDistance = cursorPoints.reduce((agg, curr, i, arr) => {
     if (i !== 0) {

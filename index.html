@@ -17,7 +17,8 @@
   <section id="in-container">
     <input type="text" id="from-text" onkeyup="fromTextChanged()" value="Tom Marvolo Riddle">
     <input type="text" id="to-text" onkeyup="toTextChanged()" value="I am Lord Voldemort">
-    <button onclick="toggleFlames()">Toggle Flames (disable if poor performance)</button>
+    <button onclick="animateText()">animate</button>
+    <button onclick="toggleFlames()">toggle flames (improves performance)</button>
   </section>
   <section id="out-container" class="use-flames" onclick="animateText()">
     <div class="fire" id="display-text"></div>
