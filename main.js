@@ -1,6 +1,6 @@
-const FONT_SIZE = 100;
 const FONT_SPACE = 0.8;
 const CHARS_PER_LINE = 8;
+let FONT_SIZE = calculateFontSize();
 let isInFromState = true;
 let isUpdateable = true;
 
@@ -11,6 +11,19 @@ function init() {
   const to = new URLSearchParams(location).get('to');
   to !== null && (document.getElementById('to-text').value = to);
   setupOutContainer();
+  window.addEventListener('resize', handleResize);
+}
+
+function handleResize() {
+  FONT_SIZE = calculateFontSize();
+  setupOutContainer();
+}
+
+function calculateFontSize() {
+  const windowWidth = window.innerWidth;
+  const availableWidth = windowWidth * 0.9;
+  const charWidth = availableWidth / CHARS_PER_LINE;
+  return charWidth * FONT_SPACE;
 }
 
 function fromTextChanged() {
@@ -100,10 +113,9 @@ function styleChar(e, i, text) {
 
   let baseOffsetX = 0;
   let baseOffsetY = 0;
-  let size = 0;
+  let size = FONT_SIZE;
 
   if (textData.searchLine !== undefined && textData.searchIndex !== undefined) {
-    size = FONT_SIZE;
     textArr = textData.text.split('\n');
     baseOffsetX = (textData.searchIndex - (textArr[textData.searchLine].length / 2)) * size * FONT_SPACE;
     baseOffsetY = ((textData.searchLine * size) - size) * 1.2;
@@ -126,7 +138,7 @@ function animateText() {
     Array.from(fromText).forEach((char, i) => {
       const alreadyFoundCount = usedLetters.filter(c => c === char).length;
       usedLetters.push(char);
-      next[i] = toText.split(char, alreadyFoundCount + 1).join(char).length
+      next[i] = toText.split(char, alreadyFoundCount + 1).join(char).length;
     });
     isInFromState = false;
   } else {
